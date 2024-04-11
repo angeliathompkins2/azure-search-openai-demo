@@ -99,7 +99,7 @@ class RetrieveThenReadVisionApproach(Approach):
             for field in vector_fields:
                 vector = (
                     await self.compute_text_embedding(q)
-                    if field == "embedding"
+                    if field == "vector"
                     else await self.compute_image_embedding(q)
                 )
                 vectors.append(vector)
@@ -118,7 +118,7 @@ class RetrieveThenReadVisionApproach(Approach):
 
         # Process results
 
-        sources_content = self.get_sources_content(results, use_semantic_captions, use_image_citation=True)
+        sources_content = self.get_sources_content(results, use_semantic_captions, use_image_citation=False)
 
         if include_gtpV_text:
             content = "\n".join(sources_content)

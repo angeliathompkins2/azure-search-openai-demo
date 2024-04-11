@@ -149,7 +149,7 @@ class Approach(ABC):
                     Document(
                         id=document.get("id"),
                         content=document.get("content"),
-                        embedding=document.get("embedding"),
+                        embedding=document.get("vector"),
                         image_embedding=document.get("imageEmbedding"),
                         category=document.get("category"),
                         sourcepage=document.get("sourcepage"),

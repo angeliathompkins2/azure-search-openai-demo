@@ -10,7 +10,7 @@ from typing import Any, AsyncGenerator, Dict, Union, cast
 from azure.core.credentials import AzureKeyCredential
 from azure.core.credentials_async import AsyncTokenCredential
 from azure.core.exceptions import ResourceNotFoundError
-from azure.identity.aio import DefaultAzureCredential, get_bearer_token_provider
+from azure.identity.aio import DefaultAzureCredential, get_bearer_token_provider, AzureCliCredential
 from azure.keyvault.secrets.aio import SecretClient
 from azure.monitor.opentelemetry import configure_azure_monitor
 from azure.search.documents.aio import SearchClient
@@ -251,12 +251,16 @@ async def setup_clients():
     AZURE_SEARCH_SEMANTIC_RANKER = os.getenv("AZURE_SEARCH_SEMANTIC_RANKER", "free").lower()
 
     USE_GPT4V = os.getenv("USE_GPT4V", "").lower() == "true"
+    localdev=os.getenv("localdev","false")
 
     # Use the current user identity to authenticate with Azure OpenAI, AI Search and Blob Storage (no secrets needed,
     # just use 'az login' locally, and managed identity when deployed on Azure). If you need to use keys, use separate AzureKeyCredential instances with the
     # keys for each service
     # If you encounter a blocking error during a DefaultAzureCredential resolution, you can exclude the problematic credential by using a parameter (ex. exclude_shared_token_cache_credential=True)
-    azure_credential = DefaultAzureCredential(exclude_shared_token_cache_credential=True)
+    if localdev:
+        azure_credential =         AzureCliCredential()
+    else:
+        azure_credential =         DefaultAzureCredential(exclude_shared_token_cache_credential=True) 
 
     # Fetch any necessary secrets from Key Vault
     search_key = None

@@ -135,7 +135,7 @@ class ChatReadRetrieveReadVisionApproach(ChatApproach):
             query_text = None
 
         results = await self.search(top, query_text, filter, vectors, use_semantic_ranker, use_semantic_captions)
-        sources_content = self.get_sources_content(results, use_semantic_captions, use_image_citation=True)
+        sources_content = self.get_sources_content(results, use_semantic_captions, use_image_citation=False)
         content = "\n".join(sources_content)
 
         # STEP 3: Generate a contextual and content specific answer using the search results and chat history
