@@ -257,10 +257,10 @@ async def setup_clients():
     # just use 'az login' locally, and managed identity when deployed on Azure). If you need to use keys, use separate AzureKeyCredential instances with the
     # keys for each service
     # If you encounter a blocking error during a DefaultAzureCredential resolution, you can exclude the problematic credential by using a parameter (ex. exclude_shared_token_cache_credential=True)
-    if localdev:
-        azure_credential =         AzureCliCredential()
-    else:
-        azure_credential =         DefaultAzureCredential(exclude_shared_token_cache_credential=True) 
+    #if localdev:
+    #    azure_credential =         AzureCliCredential()
+    #else:
+    azure_credential =         DefaultAzureCredential(exclude_visual_studio_code_credential=True,exclude_shared_token_cache_credential=True,exclude_environment_credential=True) 
 
     # Fetch any necessary secrets from Key Vault
     search_key = None
