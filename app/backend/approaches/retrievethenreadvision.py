@@ -99,7 +99,7 @@ class RetrieveThenReadVisionApproach(Approach):
             for field in vector_fields:
                 vector = (
                     await self.compute_text_embedding(q)
-                    if field == "vector"
+                    if field == "embedding"
                     else await self.compute_image_embedding(q)
                 )
                 vectors.append(vector)

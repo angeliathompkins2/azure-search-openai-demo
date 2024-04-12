@@ -29,6 +29,7 @@ class Document:
     sourcefile: Optional[str]
     oids: Optional[List[str]]
     groups: Optional[List[str]]
+    keyphrases: Optional[List[str]]
     captions: List[QueryCaptionResult]
     score: Optional[float] = None
     reranker_score: Optional[float] = None
@@ -44,6 +45,7 @@ class Document:
             "sourcefile": self.sourcefile,
             "oids": self.oids,
             "groups": self.groups,
+            "keyphrases":self.keyphrases,
             "captions": (
                 [
                     {
@@ -147,15 +149,16 @@ class Approach(ABC):
             async for document in page:
                 documents.append(
                     Document(
-                        id=document.get("id"),
-                        content=document.get("content"),
+                        id=document.get("chunk_id"),
+                        content=document.get("chunk"),
                         embedding=document.get("vector"),
                         image_embedding=document.get("imageEmbedding"),
                         category=document.get("category"),
                         sourcepage=document.get("sourcepage"),
-                        sourcefile=document.get("sourcefile"),
+                        sourcefile=document.get("title"),
                         oids=document.get("oids"),
                         groups=document.get("groups"),
+                        keyphrases=document.get("keyphrases"),
                         captions=cast(List[QueryCaptionResult], document.get("@search.captions")),
                         score=document.get("@search.score"),
                         reranker_score=document.get("@search.reranker_score"),
@@ -198,7 +201,7 @@ class Approach(ABC):
             input=q,
         )
         query_vector = embedding.data[0].embedding
-        return VectorizedQuery(vector=query_vector, k_nearest_neighbors=50, fields="embedding")
+        return VectorizedQuery(vector=query_vector, k_nearest_neighbors=50, fields="vector")
 
     async def compute_image_embedding(self, q: str):
         endpoint = urljoin(self.vision_endpoint, "computervision/retrieval:vectorizeText")
